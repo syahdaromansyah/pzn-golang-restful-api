@@ -17,33 +17,6 @@ import (
 	"github.com/syahdaromansyah/pzn-golang-restful-api/internal/helper"
 )
 
-func createOrOpenLogFile(appConfig *config.AppConfig) *os.File {
-	logFile, err := os.OpenFile(
-		appConfig.Log.FilePath,
-		os.O_CREATE|os.O_APPEND|os.O_RDWR,
-		0644,
-	)
-	helper.LogStdPanicIfError(err)
-	return logFile
-}
-
-func setupLogger(appConfig *config.AppConfig, logFile *os.File) *logrus.Logger {
-	logger := config.NewLogrus(appConfig)
-
-	if appConfig.Log.Output == "file" {
-		logger.SetOutput(logFile)
-	}
-
-	return logger
-}
-
-func setupMiddleware(appConfig *config.AppConfig, router *httprouter.Router, logger *logrus.Logger) middleware.HttpMiddleware {
-	authMiddleware := middleware.NewHttpAuthMiddleware(appConfig, router)
-	panicMiddleware := middleware.NewHttpPanicMiddleware(logger, authMiddleware)
-
-	return panicMiddleware
-}
-
 func main() {
 	appConfig := config.NewAppConfig([]string{".", "./.."})
 
@@ -102,4 +75,31 @@ func main() {
 	} else {
 		logger.WithError(err).Error("the server failed to listen and serve")
 	}
+}
+
+func createOrOpenLogFile(appConfig *config.AppConfig) *os.File {
+	logFile, err := os.OpenFile(
+		appConfig.Log.FilePath,
+		os.O_CREATE|os.O_APPEND|os.O_RDWR,
+		0644,
+	)
+	helper.LogStdPanicIfError(err)
+	return logFile
+}
+
+func setupLogger(appConfig *config.AppConfig, logFile *os.File) *logrus.Logger {
+	logger := config.NewLogrus(appConfig)
+
+	if appConfig.Log.Output == "file" {
+		logger.SetOutput(logFile)
+	}
+
+	return logger
+}
+
+func setupMiddleware(appConfig *config.AppConfig, router *httprouter.Router, logger *logrus.Logger) middleware.HttpMiddleware {
+	authMiddleware := middleware.NewHttpAuthMiddleware(appConfig, router)
+	panicMiddleware := middleware.NewHttpPanicMiddleware(logger, authMiddleware)
+
+	return panicMiddleware
 }
