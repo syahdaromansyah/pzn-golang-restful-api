@@ -209,6 +209,7 @@ $RECYCLE.BIN/
 
 # Others
 log/
+bin/
 temp/
 tmp/
 

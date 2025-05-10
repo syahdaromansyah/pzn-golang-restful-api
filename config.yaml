@@ -1,0 +1,21 @@
+server:
+  host:
+  port:
+  api_key:
+
+database:
+  connstring: postgres://username:password@host:port/dbname
+  dbconfig:
+    minconn: 10
+    maxconn: 50
+    maxconn_lifetime: 30 # In minute
+    maxconn_idletime: 60 # In minute
+
+log:
+  level: 6
+  formatter: text # "text" or "json"\
+  output: console # "console" or "file"
+  filepath: ./app.log # Works when output = "file"
+
+test:
+  timeout: 30 # In second
