@@ -32,6 +32,10 @@ The Clean Architecture is inspired by [https://github.com/khannedy/golang-clean-
 
 - Air (Live reload for Go apps): [https://github.com/air-verse/air](https://github.com/air-verse/air)
 
+## API Spec
+
+All API specification is in `api` folder.
+
 ## Configuration
 
 The app configuration is in `config.yaml` file. For Air (a live reload Go-lang apps tool) configuration, is in `.air.toml`.
@@ -87,6 +91,8 @@ go run ./cmd/web
 ```bash
 air
 ```
+
+Learn more about the [Air](https://github.com/air-verse/air) installation and its usages.
 
 ### Build
 
