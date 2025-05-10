@@ -95,10 +95,10 @@ func main() {
 
 	err := server.ListenAndServe()
 
-	<-shutdownDoneChan
-
 	if errors.Is(err, http.ErrServerClosed) {
-		logger.Info("the server has been shut down")
+		logger.WithError(err).Error("the server has been closed")
+
+		<-shutdownDoneChan
 	} else {
 		logger.WithError(err).Error("the server failed to listen and serve")
 	}
