@@ -7,7 +7,6 @@ import (
 	"github.com/google/wire"
 	"github.com/julienschmidt/httprouter"
 	"github.com/sirupsen/logrus"
-	"github.com/spf13/viper"
 	"github.com/syahdaromansyah/pzn-golang-restful-api/internal/controller/http"
 	"github.com/syahdaromansyah/pzn-golang-restful-api/internal/controller/http/route"
 	"github.com/syahdaromansyah/pzn-golang-restful-api/internal/db"
@@ -28,7 +27,7 @@ var controllerSet = wire.NewSet(
 	http.NewCategoryControllerImpl,
 )
 
-func InitializeController(vp *viper.Viper, database db.PgxPool, logger *logrus.Logger, router *httprouter.Router) route.RouteConfig {
+func InitializeController(database db.PgxPool, logger *logrus.Logger, router *httprouter.Router) route.RouteConfig {
 	wire.Build(
 		security.NewIdGenImpl,
 		security.NewValidationImpl,

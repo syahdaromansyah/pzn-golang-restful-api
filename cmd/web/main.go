@@ -12,15 +12,14 @@ import (
 
 	"github.com/julienschmidt/httprouter"
 	"github.com/sirupsen/logrus"
-	"github.com/spf13/viper"
 	"github.com/syahdaromansyah/pzn-golang-restful-api/internal/config"
 	"github.com/syahdaromansyah/pzn-golang-restful-api/internal/controller/http/middleware"
 	"github.com/syahdaromansyah/pzn-golang-restful-api/internal/helper"
 )
 
-func createOrOpenLogFile(vp *viper.Viper) *os.File {
+func createOrOpenLogFile(appConfig *config.AppConfig) *os.File {
 	logFile, err := os.OpenFile(
-		vp.GetString("log.filepath"),
+		appConfig.Log.FilePath,
 		os.O_CREATE|os.O_APPEND|os.O_RDWR,
 		0644,
 	)
@@ -28,42 +27,42 @@ func createOrOpenLogFile(vp *viper.Viper) *os.File {
 	return logFile
 }
 
-func setupLogger(vp *viper.Viper, logFile *os.File) *logrus.Logger {
-	logger := config.NewLogrus(vp)
+func setupLogger(appConfig *config.AppConfig, logFile *os.File) *logrus.Logger {
+	logger := config.NewLogrus(appConfig)
 
-	if vp.GetString("log.output") == "file" {
+	if appConfig.Log.Output == "file" {
 		logger.SetOutput(logFile)
 	}
 
 	return logger
 }
 
-func setupMiddleware(vp *viper.Viper, router *httprouter.Router, logger *logrus.Logger) middleware.HttpMiddleware {
-	authMiddleware := middleware.NewHttpAuthMiddleware(vp, router)
+func setupMiddleware(appConfig *config.AppConfig, router *httprouter.Router, logger *logrus.Logger) middleware.HttpMiddleware {
+	authMiddleware := middleware.NewHttpAuthMiddleware(appConfig, router)
 	panicMiddleware := middleware.NewHttpPanicMiddleware(logger, authMiddleware)
 
 	return panicMiddleware
 }
 
 func main() {
-	vp := config.NewViper([]string{".", "./.."})
+	appConfig := config.NewAppConfig([]string{".", "./.."})
 
-	pool := config.NewPgxPool(vp)
+	pool := config.NewPgxPool(appConfig)
 	defer pool.Close()
 
-	logFile := createOrOpenLogFile(vp)
+	logFile := createOrOpenLogFile(appConfig)
 	defer logFile.Close()
 
-	logger := setupLogger(vp, logFile)
+	logger := setupLogger(appConfig, logFile)
 
 	router := httprouter.New()
 
-	routeConfig := InitializeController(vp, pool, logger, router)
+	routeConfig := InitializeController(pool, logger, router)
 	routeConfig.Setup()
 
 	server := &http.Server{
-		Addr:    fmt.Sprintf("%s:%d", vp.GetString("server.host"), vp.GetInt("server.port")),
-		Handler: setupMiddleware(vp, router, logger),
+		Addr:    fmt.Sprintf("%s:%d", appConfig.Server.Host, appConfig.Server.Port),
+		Handler: setupMiddleware(appConfig, router, logger),
 	}
 
 	sigChan := make(chan os.Signal, 1)

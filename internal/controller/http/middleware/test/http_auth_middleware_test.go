@@ -13,7 +13,7 @@ import (
 	"github.com/syahdaromansyah/pzn-golang-restful-api/internal/helper"
 )
 
-var vp = config.NewViper([]string{"./../../../../.."})
+var appConfig = config.NewAppConfig([]string{"./../../../../.."})
 
 type controllerHandler struct{}
 
@@ -27,7 +27,7 @@ func TestFailed(t *testing.T) {
 
 	assert.Panics(t, func() {
 		// ---SUT (Subject Under Test)
-		middleware.NewHttpAuthMiddleware(vp, new(controllerHandler)).ServeHTTP(recorder, testRequest)
+		middleware.NewHttpAuthMiddleware(appConfig, new(controllerHandler)).ServeHTTP(recorder, testRequest)
 		// ---------------------------
 	})
 }
@@ -40,7 +40,7 @@ func TestSuccess(t *testing.T) {
 
 	assert.NotPanics(t, func() {
 		// ---SUT (Subject Under Test)
-		middleware.NewHttpAuthMiddleware(vp, new(controllerHandler)).ServeHTTP(recorder, testRequest)
+		middleware.NewHttpAuthMiddleware(appConfig, new(controllerHandler)).ServeHTTP(recorder, testRequest)
 		// ---------------------------
 	})
 

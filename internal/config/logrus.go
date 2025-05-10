@@ -2,15 +2,14 @@ package config
 
 import (
 	"github.com/sirupsen/logrus"
-	"github.com/spf13/viper"
 )
 
-func NewLogrus(vp *viper.Viper) *logrus.Logger {
+func NewLogrus(appConfig *AppConfig) *logrus.Logger {
 	logger := logrus.New()
 
-	logger.SetLevel(logrus.Level(vp.GetInt("log.level")))
+	logger.SetLevel(logrus.Level(appConfig.Log.Level))
 
-	if vp.GetString("log.formatter") == "json" {
+	if appConfig.Log.Formatter == "json" {
 		logger.SetFormatter(new(logrus.JSONFormatter))
 	}
 

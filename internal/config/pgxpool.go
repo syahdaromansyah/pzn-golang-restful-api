@@ -5,19 +5,18 @@ import (
 	"time"
 
 	"github.com/jackc/pgx/v5/pgxpool"
-	"github.com/spf13/viper"
 	"github.com/syahdaromansyah/pzn-golang-restful-api/internal/db"
 	"github.com/syahdaromansyah/pzn-golang-restful-api/internal/helper"
 )
 
-func NewPgxPool(vp *viper.Viper) db.PgxPool {
-	pgxPoolCfg, err := pgxpool.ParseConfig(vp.GetString("database.connstring"))
+func NewPgxPool(appConfig *AppConfig) db.PgxPool {
+	pgxPoolCfg, err := pgxpool.ParseConfig(appConfig.Database.ConnString)
 	helper.LogStdPanicIfError(err)
 
-	pgxPoolCfg.MinConns = int32(vp.GetInt("database.dbconfig.minconn"))
-	pgxPoolCfg.MaxConns = int32(vp.GetInt("database.dbconfig.maxconn"))
-	pgxPoolCfg.MaxConnLifetime = time.Duration(vp.GetInt("database.dbconfig.maxconn_lifetime")) * time.Minute
-	pgxPoolCfg.MaxConnIdleTime = time.Duration(vp.GetInt("database.dbconfig.maxconn_idletime")) * time.Minute
+	pgxPoolCfg.MinConns = int32(appConfig.Database.MinConns)
+	pgxPoolCfg.MaxConns = int32(appConfig.Database.MaxConns)
+	pgxPoolCfg.MaxConnLifetime = appConfig.Database.MaxConnLifeTime * time.Minute
+	pgxPoolCfg.MaxConnIdleTime = appConfig.Database.MaxConnIdleTime * time.Minute
 
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()

@@ -18,7 +18,7 @@ import (
 )
 
 var logger = config.NewLogrus(
-	config.NewViper([]string{"./../../../../.."}),
+	config.NewAppConfig([]string{"./../../../../.."}),
 )
 
 type panicHandler struct {

@@ -16,15 +16,15 @@ import (
 	"github.com/stretchr/testify/mock"
 )
 
-var vp = config.NewViper([]string{"./../../.."})
+var appConfig = config.NewAppConfig([]string{"./../../.."})
 
 func TestSaveFailed(t *testing.T) {
 	t.Run("Field 'name' | Constraint Check | Chars Min", func(t *testing.T) {
 		// Arrange
-		pool := config.NewPgxPool(vp)
+		pool := config.NewPgxPool(appConfig)
 		defer pool.Close()
 
-		ctx, cancel := context.WithTimeout(context.Background(), vp.GetDuration("test.timeout")*time.Second)
+		ctx, cancel := context.WithTimeout(context.Background(), appConfig.Test.Timeout*time.Second)
 		defer cancel()
 
 		tx, err := pool.Begin(ctx)
@@ -57,10 +57,10 @@ func TestSaveFailed(t *testing.T) {
 func TestSaveSuccess(t *testing.T) {
 	t.Run("Create Uncreated Category", func(t *testing.T) {
 		// Arrange
-		pool := config.NewPgxPool(vp)
+		pool := config.NewPgxPool(appConfig)
 		defer pool.Close()
 
-		ctx, cancel := context.WithTimeout(context.Background(), vp.GetDuration("test.timeout")*time.Second)
+		ctx, cancel := context.WithTimeout(context.Background(), appConfig.Test.Timeout*time.Second)
 		defer cancel()
 
 		tx, err := pool.Begin(ctx)
@@ -93,7 +93,7 @@ func TestSaveSuccess(t *testing.T) {
 		idGen.Mock.AssertExpectations(t)
 		idGen.Mock.AssertNumberOfCalls(t, "Generate", 1)
 
-		dbHelper := test_helper.NewCategoriesDbTable(vp)
+		dbHelper := test_helper.NewCategoriesDbTable(appConfig)
 		defer dbHelper.DeleteAll()
 
 		assert.Equal(t, 1, len(dbHelper.FindAll()))
@@ -108,7 +108,7 @@ func TestSaveSuccess(t *testing.T) {
 		// Arrange
 
 		// --- Insert dummy data to DB
-		dbHelper := test_helper.NewCategoriesDbTable(vp)
+		dbHelper := test_helper.NewCategoriesDbTable(appConfig)
 		defer dbHelper.DeleteAll()
 
 		dbHelper.Add(&entity.Category{
@@ -117,10 +117,10 @@ func TestSaveSuccess(t *testing.T) {
 		})
 		// --- END
 
-		pool := config.NewPgxPool(vp)
+		pool := config.NewPgxPool(appConfig)
 		defer pool.Close()
 
-		ctx, cancel := context.WithTimeout(context.Background(), vp.GetDuration("test.timeout")*time.Second)
+		ctx, cancel := context.WithTimeout(context.Background(), appConfig.Test.Timeout*time.Second)
 		defer cancel()
 
 		tx, err := pool.Begin(ctx)
@@ -170,7 +170,7 @@ func TestUpdateFailed(t *testing.T) {
 		// Arrange
 
 		// --- Insert dummy data to DB
-		dbHelper := test_helper.NewCategoriesDbTable(vp)
+		dbHelper := test_helper.NewCategoriesDbTable(appConfig)
 		defer dbHelper.DeleteAll()
 
 		dbHelper.Add(&entity.Category{
@@ -179,10 +179,10 @@ func TestUpdateFailed(t *testing.T) {
 		})
 		// --- END
 
-		pool := config.NewPgxPool(vp)
+		pool := config.NewPgxPool(appConfig)
 		defer pool.Close()
 
-		ctx, cancel := context.WithTimeout(context.Background(), vp.GetDuration("test.timeout")*time.Second)
+		ctx, cancel := context.WithTimeout(context.Background(), appConfig.Test.Timeout*time.Second)
 		defer cancel()
 
 		tx, err := pool.Begin(ctx)
@@ -209,7 +209,7 @@ func TestUpdateSuccess(t *testing.T) {
 	// Arrange
 
 	// --- Insert dummy data to DB
-	dbHelper := test_helper.NewCategoriesDbTable(vp)
+	dbHelper := test_helper.NewCategoriesDbTable(appConfig)
 	defer dbHelper.DeleteAll()
 
 	dbHelper.Add(&entity.Category{
@@ -218,10 +218,10 @@ func TestUpdateSuccess(t *testing.T) {
 	})
 	// --- END
 
-	pool := config.NewPgxPool(vp)
+	pool := config.NewPgxPool(appConfig)
 	defer pool.Close()
 
-	ctx, cancel := context.WithTimeout(context.Background(), vp.GetDuration("test.timeout")*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), appConfig.Test.Timeout*time.Second)
 	defer cancel()
 
 	tx, err := pool.Begin(ctx)
@@ -258,7 +258,7 @@ func TestDeleteSuccess(t *testing.T) {
 	// Arrange
 
 	// --- Insert dummy data to DB
-	dbHelper := test_helper.NewCategoriesDbTable(vp)
+	dbHelper := test_helper.NewCategoriesDbTable(appConfig)
 	defer dbHelper.DeleteAll()
 
 	dbHelper.Add(&entity.Category{
@@ -267,10 +267,10 @@ func TestDeleteSuccess(t *testing.T) {
 	})
 	// --- END
 
-	pool := config.NewPgxPool(vp)
+	pool := config.NewPgxPool(appConfig)
 	defer pool.Close()
 
-	ctx, cancel := context.WithTimeout(context.Background(), vp.GetDuration("test.timeout")*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), appConfig.Test.Timeout*time.Second)
 	defer cancel()
 
 	tx, err := pool.Begin(ctx)
@@ -293,10 +293,10 @@ func TestDeleteSuccess(t *testing.T) {
 func TestFindByIdFailed(t *testing.T) {
 	t.Run("Category is Not Found", func(t *testing.T) {
 		// Arrange
-		pool := config.NewPgxPool(vp)
+		pool := config.NewPgxPool(appConfig)
 		defer pool.Close()
 
-		ctx, cancel := context.WithTimeout(context.Background(), vp.GetDuration("test.timeout")*time.Second)
+		ctx, cancel := context.WithTimeout(context.Background(), appConfig.Test.Timeout*time.Second)
 		defer cancel()
 
 		tx, err := pool.Begin(ctx)
@@ -320,7 +320,7 @@ func TestFindByIdSuccess(t *testing.T) {
 	// Arrange
 
 	// --- Insert dummy data to DB
-	dbHelper := test_helper.NewCategoriesDbTable(vp)
+	dbHelper := test_helper.NewCategoriesDbTable(appConfig)
 	defer dbHelper.DeleteAll()
 
 	dbHelper.Add(&entity.Category{
@@ -329,10 +329,10 @@ func TestFindByIdSuccess(t *testing.T) {
 	})
 	// --- END
 
-	pool := config.NewPgxPool(vp)
+	pool := config.NewPgxPool(appConfig)
 	defer pool.Close()
 
-	ctx, cancel := context.WithTimeout(context.Background(), vp.GetDuration("test.timeout")*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), appConfig.Test.Timeout*time.Second)
 	defer cancel()
 
 	tx, err := pool.Begin(ctx)
@@ -361,7 +361,7 @@ func TestFindAllSuccess(t *testing.T) {
 	// Arrange
 
 	// --- Insert dummy data to DB
-	dbHelper := test_helper.NewCategoriesDbTable(vp)
+	dbHelper := test_helper.NewCategoriesDbTable(appConfig)
 	defer dbHelper.DeleteAll()
 
 	dbHelper.AddMany([]entity.Category{
@@ -371,10 +371,10 @@ func TestFindAllSuccess(t *testing.T) {
 	})
 	// --- END
 
-	pool := config.NewPgxPool(vp)
+	pool := config.NewPgxPool(appConfig)
 	defer pool.Close()
 
-	ctx, cancel := context.WithTimeout(context.Background(), vp.GetDuration("test.timeout")*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), appConfig.Test.Timeout*time.Second)
 	defer cancel()
 
 	tx, err := pool.Begin(ctx)

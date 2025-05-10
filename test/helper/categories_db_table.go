@@ -9,24 +9,23 @@ import (
 	"github.com/syahdaromansyah/pzn-golang-restful-api/internal/helper"
 
 	"github.com/jackc/pgx/v5"
-	"github.com/spf13/viper"
 )
 
 type categoriesDbTable struct {
-	Viper *viper.Viper
+	AppConfig *config.AppConfig
 }
 
-func NewCategoriesDbTable(vp *viper.Viper) *categoriesDbTable {
+func NewCategoriesDbTable(appConfig *config.AppConfig) *categoriesDbTable {
 	return &categoriesDbTable{
-		Viper: vp,
+		AppConfig: appConfig,
 	}
 }
 
 func (d *categoriesDbTable) Add(data *entity.Category) {
-	pool := config.NewPgxPool(d.Viper)
+	pool := config.NewPgxPool(d.AppConfig)
 	defer pool.Close()
 
-	ctx, cancel := context.WithTimeout(context.Background(), d.Viper.GetDuration("test.timeout")*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), d.AppConfig.Test.Timeout*time.Second)
 	defer cancel()
 
 	tx, err := pool.Begin(ctx)
@@ -39,10 +38,10 @@ func (d *categoriesDbTable) Add(data *entity.Category) {
 }
 
 func (d *categoriesDbTable) AddMany(data []entity.Category) {
-	pool := config.NewPgxPool(d.Viper)
+	pool := config.NewPgxPool(d.AppConfig)
 	defer pool.Close()
 
-	ctx, cancel := context.WithTimeout(context.Background(), d.Viper.GetDuration("test.timeout")*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), d.AppConfig.Test.Timeout*time.Second)
 	defer cancel()
 
 	tx, err := pool.Begin(ctx)
@@ -57,10 +56,10 @@ func (d *categoriesDbTable) AddMany(data []entity.Category) {
 }
 
 func (d *categoriesDbTable) DeleteAll() {
-	pool := config.NewPgxPool(d.Viper)
+	pool := config.NewPgxPool(d.AppConfig)
 	defer pool.Close()
 
-	ctx, cancel := context.WithTimeout(context.Background(), d.Viper.GetDuration("test.timeout")*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), d.AppConfig.Test.Timeout*time.Second)
 	defer cancel()
 
 	tx, err := pool.Begin(ctx)
@@ -73,10 +72,10 @@ func (d *categoriesDbTable) DeleteAll() {
 }
 
 func (d *categoriesDbTable) FindById(categoryId string) *entity.Category {
-	pool := config.NewPgxPool(d.Viper)
+	pool := config.NewPgxPool(d.AppConfig)
 	defer pool.Close()
 
-	ctx, cancel := context.WithTimeout(context.Background(), d.Viper.GetDuration("test.timeout")*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), d.AppConfig.Test.Timeout*time.Second)
 	defer cancel()
 
 	tx, err := pool.Begin(ctx)
@@ -93,10 +92,10 @@ func (d *categoriesDbTable) FindById(categoryId string) *entity.Category {
 }
 
 func (d *categoriesDbTable) FindAll() []entity.Category {
-	pool := config.NewPgxPool(d.Viper)
+	pool := config.NewPgxPool(d.AppConfig)
 	defer pool.Close()
 
-	ctx, cancel := context.WithTimeout(context.Background(), d.Viper.GetDuration("test.timeout")*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), d.AppConfig.Test.Timeout*time.Second)
 	defer cancel()
 
 	tx, err := pool.Begin(ctx)

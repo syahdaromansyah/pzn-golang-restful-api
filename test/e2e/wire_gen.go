@@ -10,7 +10,7 @@ import (
 	"github.com/google/wire"
 	"github.com/julienschmidt/httprouter"
 	"github.com/sirupsen/logrus"
-	"github.com/spf13/viper"
+	"github.com/syahdaromansyah/pzn-golang-restful-api/internal/config"
 	"github.com/syahdaromansyah/pzn-golang-restful-api/internal/controller/http"
 	"github.com/syahdaromansyah/pzn-golang-restful-api/internal/controller/http/route"
 	"github.com/syahdaromansyah/pzn-golang-restful-api/internal/db"
@@ -21,7 +21,7 @@ import (
 
 // Injectors from injector_for_testing.go:
 
-func InitializeControllerForTesting(vp *viper.Viper, database db.PgxPool, logger *logrus.Logger, router *httprouter.Router) route.RouteConfig {
+func InitializeControllerForTesting(appConfig *config.AppConfig, database db.PgxPool, logger *logrus.Logger, router *httprouter.Router) route.RouteConfig {
 	validation := security.NewValidationImpl()
 	idGenerator := security.NewIdGenImpl()
 	categoryRepository := repository.NewCategoryRepositoryImpl(idGenerator)
