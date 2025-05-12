@@ -2,6 +2,7 @@ package config
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	"github.com/jackc/pgx/v5/pgxpool"
@@ -10,7 +11,9 @@ import (
 )
 
 func NewPgxPool(appConfig *AppConfig) db.PgxPool {
-	pgxPoolCfg, err := pgxpool.ParseConfig(appConfig.Database.ConnString)
+	connString := fmt.Sprintf("postgres://%s:%s@%s:%d/%s", appConfig.Database.Username, appConfig.Database.Password, appConfig.Database.Host, appConfig.Database.Port, appConfig.Database.DBName)
+
+	pgxPoolCfg, err := pgxpool.ParseConfig(connString)
 	helper.LogStdPanicIfError(err)
 
 	pgxPoolCfg.MinConns = int32(appConfig.Database.MinConns)

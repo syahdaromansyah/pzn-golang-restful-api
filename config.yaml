@@ -1,14 +1,18 @@
 server:
   host:
   port:
-  apiKey:
+  apikey:
 
 database:
-  connString: postgres://username:password@host:port/db_name
-  minConns: 15
-  maxConns: 60
-  maxConnLifeTime: 45 # In minute
-  maxConnIdleTime: 60 # In minute
+  username:
+  password:
+  host:
+  port:
+  dbname:
+  minconns: 15
+  maxconns: 60
+  maxconnlifetime: 45 # In minute
+  maxconnidletime: 60 # In minute
 
 log:
   level: 6

@@ -16,7 +16,11 @@ type (
 	}
 
 	Database struct {
-		ConnString      string
+		Username        string
+		Password        string
+		Host            string
+		Port            int
+		DBName          string
 		MinConns        int
 		MaxConns        int
 		MaxConnLifeTime time.Duration
