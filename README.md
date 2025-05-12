@@ -40,6 +40,14 @@ All API specification is in `api` folder.
 
 The app configuration is in `config.yaml` file. For Air (a live reload Go-lang apps tool) configuration, is in `.air.toml`.
 
+## CLI Flags
+
+```bash
+Options:
+  -configPaths=<path>       Set the config.yaml absolute or relative
+                            location file. Default value "./"
+```
+
 ## Database Migration
 
 All database migration is in `db/migrations` folder.

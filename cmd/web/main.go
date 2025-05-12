@@ -3,10 +3,12 @@ package main
 import (
 	"context"
 	"errors"
+	"flag"
 	"fmt"
 	"net/http"
 	"os"
 	"os/signal"
+	"strings"
 	"syscall"
 	"time"
 
@@ -17,8 +19,12 @@ import (
 	"github.com/syahdaromansyah/pzn-golang-restful-api/internal/helper"
 )
 
+var configPaths []string
+
 func main() {
-	appConfig := config.NewAppConfig([]string{".", "./.."})
+	parseFlag()
+
+	appConfig := config.NewAppConfig(configPaths)
 
 	pool := config.NewPgxPool(appConfig)
 	defer pool.Close()
@@ -74,6 +80,18 @@ func main() {
 		<-shutdownDoneChan
 	} else {
 		logger.WithError(err).Error("the server failed to listen and serve")
+	}
+}
+
+func parseFlag() {
+	if !flag.Parsed() {
+		var configPathsFlag string
+
+		flag.StringVar(&configPathsFlag, "configPaths", "./", "Multiple config paths separated with commas")
+
+		flag.Parse()
+
+		configPaths = strings.Split(configPathsFlag, ",")
 	}
 }
 
