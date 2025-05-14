@@ -38,7 +38,7 @@ All API specification is in `api` folder.
 
 ## Configuration
 
-The app configuration is in `config.yaml` file. For Air (a live reload Go-lang apps tool) configuration, is in `.air.toml`.
+The app configuration file must be named `config.yaml`, and an example of its content is in the `config-example.yaml`. For Air (a live reload Go-lang apps tool) configuration, is in `.air.toml`.
 
 ## CLI Flags
 
