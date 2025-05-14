@@ -216,4 +216,6 @@ tmp/
 .temp/
 .tmp/
 
+config.yaml
+
 *.log
