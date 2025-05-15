@@ -50,7 +50,12 @@ type AppConfigPaths []string
 
 var (
 	syncOnce  sync.Once
-	appConfig *AppConfig
+	appConfig = &AppConfig{
+		Server:   new(Server),
+		Database: new(Database),
+		Log:      new(Log),
+		Test:     new(Test),
+	}
 )
 
 func NewAppConfig(configPaths AppConfigPaths) *AppConfig {
