@@ -79,14 +79,12 @@ Learn more about [Google Wire](https://github.com/google/wire).
 ### Run all test
 
 ```bash
-go test ./internal/... ./test/e2e
+go test -v -p=1 -count=1 ./internal/... ./test/e2e
 ```
 
-or set `-v` for verbose output,
+The testing command will output verbosely (-v), run in sequentially (-p=1), and run without cache (-count=1). The testing can be run concurrently by removing the `-p=1` flag for faster testing execution.
 
-```bash
-go test -v ./internal/... ./test/e2e
-```
+However, it can be a **problem** when several tests must interact with a database or other shared resources. This can cause a race condition, and the tests result will not be reliable, even the fact that the tests should be successful.
 
 ### Run web server
 
@@ -111,7 +109,7 @@ go build -o ./bin/app ./cmd/web
 #### Run Binary
 
 ```bash
-./bin/app # or in Windows, ./bin/app.exe
+./bin/app # or in Windows, ...\bin\app.exe
 ```
 
 ## License
