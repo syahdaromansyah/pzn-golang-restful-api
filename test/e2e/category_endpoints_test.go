@@ -17,9 +17,20 @@ import (
 	"github.com/syahdaromansyah/pzn-golang-restful-api/test/helper"
 )
 
+var configPath = []string{"./../.."}
+
+func setupAppTestConfig() *config.AppConfig {
+	appTestConfig := config.NewAppConfig(configPath)
+	appTestConfig.Server.ApiKey = "test_key"
+	return appTestConfig
+}
+
 var baseUrl = "http://localhost:3000"
-var appConfig = config.NewAppConfig([]string{"./../.."})
-var categoriesDbTableHelper = helper.NewCategoriesDbTable(appConfig)
+var appTestConfig = setupAppTestConfig()
+
+var categoriesDbTableHelper = helper.NewCategoriesDbTable(
+	config.NewAppConfig(configPath),
+)
 
 func TestUnauthorized(t *testing.T) {
 	// Arrange
@@ -29,7 +40,7 @@ func TestUnauthorized(t *testing.T) {
 
 	recorder := httptest.NewRecorder()
 
-	middlewareTesting := setupMiddleware(appConfig)
+	middlewareTesting := setupMiddleware(appTestConfig)
 
 	// Action
 	middlewareTesting.ServeHTTP(recorder, testRequest)
@@ -62,11 +73,11 @@ func TestCreateFailed(t *testing.T) {
 
 		testRequest := httptest.NewRequest(http.MethodPost, fmt.Sprintf("%s/api/categories", baseUrl), requestBody)
 
-		testRequest.Header.Set("X-API-Key", appConfig.Server.ApiKey)
+		testRequest.Header.Set("X-API-Key", "test_key")
 
 		recorder := httptest.NewRecorder()
 
-		middlewareTesting := setupMiddleware(appConfig)
+		middlewareTesting := setupMiddleware(appTestConfig)
 
 		// Action
 		middlewareTesting.ServeHTTP(recorder, testRequest)
@@ -97,11 +108,11 @@ func TestCreateFailed(t *testing.T) {
 
 		testRequest := httptest.NewRequest(http.MethodPost, fmt.Sprintf("%s/api/categories", baseUrl), requestBody)
 
-		testRequest.Header.Set("X-API-Key", appConfig.Server.ApiKey)
+		testRequest.Header.Set("X-API-Key", "test_key")
 
 		recorder := httptest.NewRecorder()
 
-		middlewareTesting := setupMiddleware(appConfig)
+		middlewareTesting := setupMiddleware(appTestConfig)
 
 		// Action
 		middlewareTesting.ServeHTTP(recorder, testRequest)
@@ -133,11 +144,11 @@ func TestCreateSuccess(t *testing.T) {
 
 	testRequest := httptest.NewRequest(http.MethodPost, fmt.Sprintf("%s/api/categories", baseUrl), requestBody)
 
-	testRequest.Header.Set("X-API-Key", appConfig.Server.ApiKey)
+	testRequest.Header.Set("X-API-Key", "test_key")
 
 	recorder := httptest.NewRecorder()
 
-	middlewareTesting := setupMiddleware(appConfig)
+	middlewareTesting := setupMiddleware(appTestConfig)
 
 	// Action
 	middlewareTesting.ServeHTTP(recorder, testRequest)
@@ -171,11 +182,11 @@ func TestUpdateFailed(t *testing.T) {
 
 		testRequest := httptest.NewRequest(http.MethodPut, fmt.Sprintf("%s/api/categories/CAT-1", baseUrl), requestBody)
 
-		testRequest.Header.Set("X-API-Key", appConfig.Server.ApiKey)
+		testRequest.Header.Set("X-API-Key", "test_key")
 
 		recorder := httptest.NewRecorder()
 
-		middlewareTesting := setupMiddleware(appConfig)
+		middlewareTesting := setupMiddleware(appTestConfig)
 
 		// Action
 		middlewareTesting.ServeHTTP(recorder, testRequest)
@@ -206,11 +217,11 @@ func TestUpdateFailed(t *testing.T) {
 
 		testRequest := httptest.NewRequest(http.MethodPut, fmt.Sprintf("%s/api/categories/CAT-1", baseUrl), requestBody)
 
-		testRequest.Header.Set("X-API-Key", appConfig.Server.ApiKey)
+		testRequest.Header.Set("X-API-Key", "test_key")
 
 		recorder := httptest.NewRecorder()
 
-		middlewareTesting := setupMiddleware(appConfig)
+		middlewareTesting := setupMiddleware(appTestConfig)
 
 		// Action
 		middlewareTesting.ServeHTTP(recorder, testRequest)
@@ -242,11 +253,11 @@ func TestUpdateFailed(t *testing.T) {
 
 		testRequest := httptest.NewRequest(http.MethodPut, fmt.Sprintf("%s/api/categories/CAT-1", baseUrl), requestBody)
 
-		testRequest.Header.Set("X-API-Key", appConfig.Server.ApiKey)
+		testRequest.Header.Set("X-API-Key", "test_key")
 
 		recorder := httptest.NewRecorder()
 
-		middlewareTesting := setupMiddleware(appConfig)
+		middlewareTesting := setupMiddleware(appTestConfig)
 
 		// Action
 		middlewareTesting.ServeHTTP(recorder, testRequest)
@@ -285,11 +296,11 @@ func TestUpdateSuccess(t *testing.T) {
 
 	testRequest := httptest.NewRequest(http.MethodPut, fmt.Sprintf("%s/api/categories/CAT-1", baseUrl), requestBody)
 
-	testRequest.Header.Set("X-API-Key", appConfig.Server.ApiKey)
+	testRequest.Header.Set("X-API-Key", "test_key")
 
 	recorder := httptest.NewRecorder()
 
-	middlewareTesting := setupMiddleware(appConfig)
+	middlewareTesting := setupMiddleware(appTestConfig)
 
 	// Action
 	middlewareTesting.ServeHTTP(recorder, testRequest)
@@ -321,11 +332,11 @@ func TestDeleteFailed(t *testing.T) {
 
 		testRequest := httptest.NewRequest(http.MethodDelete, fmt.Sprintf("%s/api/categories/CAT-1", baseUrl), nil)
 
-		testRequest.Header.Set("X-API-Key", appConfig.Server.ApiKey)
+		testRequest.Header.Set("X-API-Key", "test_key")
 
 		recorder := httptest.NewRecorder()
 
-		middlewareTesting := setupMiddleware(appConfig)
+		middlewareTesting := setupMiddleware(appTestConfig)
 
 		// Action
 		middlewareTesting.ServeHTTP(recorder, testRequest)
@@ -363,11 +374,11 @@ func TestDeleteSuccess(t *testing.T) {
 
 	testRequest := httptest.NewRequest(http.MethodDelete, fmt.Sprintf("%s/api/categories/CAT-1", baseUrl), nil)
 
-	testRequest.Header.Set("X-API-Key", appConfig.Server.ApiKey)
+	testRequest.Header.Set("X-API-Key", "test_key")
 
 	recorder := httptest.NewRecorder()
 
-	middlewareTesting := setupMiddleware(appConfig)
+	middlewareTesting := setupMiddleware(appTestConfig)
 
 	// Action
 	middlewareTesting.ServeHTTP(recorder, testRequest)
@@ -400,11 +411,11 @@ func TestFindByIdFailed(t *testing.T) {
 
 		testRequest := httptest.NewRequest(http.MethodGet, fmt.Sprintf("%s/api/categories/CAT-1", baseUrl), nil)
 
-		testRequest.Header.Set("X-API-Key", appConfig.Server.ApiKey)
+		testRequest.Header.Set("X-API-Key", "test_key")
 
 		recorder := httptest.NewRecorder()
 
-		middlewareTesting := setupMiddleware(appConfig)
+		middlewareTesting := setupMiddleware(appTestConfig)
 
 		// Action
 		middlewareTesting.ServeHTTP(recorder, testRequest)
@@ -442,11 +453,11 @@ func TestFindByIdSuccess(t *testing.T) {
 
 	testRequest := httptest.NewRequest(http.MethodGet, fmt.Sprintf("%s/api/categories/CAT-1", baseUrl), nil)
 
-	testRequest.Header.Set("X-API-Key", appConfig.Server.ApiKey)
+	testRequest.Header.Set("X-API-Key", "test_key")
 
 	recorder := httptest.NewRecorder()
 
-	middlewareTesting := setupMiddleware(appConfig)
+	middlewareTesting := setupMiddleware(appTestConfig)
 
 	// Action
 	middlewareTesting.ServeHTTP(recorder, testRequest)
@@ -487,11 +498,11 @@ func TestFindAllSuccess(t *testing.T) {
 
 	testRequest := httptest.NewRequest(http.MethodGet, fmt.Sprintf("%s/api/categories", baseUrl), nil)
 
-	testRequest.Header.Set("X-API-Key", appConfig.Server.ApiKey)
+	testRequest.Header.Set("X-API-Key", "test_key")
 
 	recorder := httptest.NewRecorder()
 
-	middlewareTesting := setupMiddleware(appConfig)
+	middlewareTesting := setupMiddleware(appTestConfig)
 
 	// Action
 	middlewareTesting.ServeHTTP(recorder, testRequest)

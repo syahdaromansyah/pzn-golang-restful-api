@@ -13,7 +13,15 @@ import (
 	"github.com/syahdaromansyah/pzn-golang-restful-api/internal/helper"
 )
 
-var appConfig = config.NewAppConfig([]string{"./../../../../.."})
+func setupAppTestConfig() *config.AppConfig {
+	return &config.AppConfig{
+		Server: &config.Server{
+			ApiKey: "test_key",
+		},
+	}
+}
+
+var appTestConfig = setupAppTestConfig()
 
 type controllerHandler struct{}
 
@@ -22,25 +30,29 @@ func (h *controllerHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 }
 
 func TestFailed(t *testing.T) {
+	// Arrange
 	testRequest := httptest.NewRequest("", "/", nil)
 	recorder := httptest.NewRecorder()
 
+	// Action & Assert
 	assert.Panics(t, func() {
 		// ---SUT (Subject Under Test)
-		middleware.NewHttpAuthMiddleware(appConfig, new(controllerHandler)).ServeHTTP(recorder, testRequest)
+		middleware.NewHttpAuthMiddleware(appTestConfig, new(controllerHandler)).ServeHTTP(recorder, testRequest)
 		// ---------------------------
 	})
 }
 
 func TestSuccess(t *testing.T) {
+	// Arrange
 	testRequest := httptest.NewRequest("", "/", nil)
 	testRequest.Header.Set("X-API-Key", "test_key")
 
 	recorder := httptest.NewRecorder()
 
+	// Action & Assert
 	assert.NotPanics(t, func() {
 		// ---SUT (Subject Under Test)
-		middleware.NewHttpAuthMiddleware(appConfig, new(controllerHandler)).ServeHTTP(recorder, testRequest)
+		middleware.NewHttpAuthMiddleware(appTestConfig, new(controllerHandler)).ServeHTTP(recorder, testRequest)
 		// ---------------------------
 	})
 
