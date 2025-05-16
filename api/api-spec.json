@@ -1,13 +1,13 @@
 {
   "openapi": "3.1.1",
   "info": {
-    "title": "Category Service - RESTful API",
-    "description": "API specification for RESTful API of category service",
-    "version": "1.2.1"
+    "title": "Go-lang RESTful API",
+    "description": "API specification for Go-lang RESTful API",
+    "version": "2.0.0"
   },
   "servers": [
     {
-      "url": "http://localhost:3000/api"
+      "url": "http://localhost:3000/api/v2"
     }
   ],
   "paths": {
@@ -39,7 +39,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/WebResponseClientError"
+                  "$ref": "#/components/schemas/WebResponseMessage"
                 }
               }
             }
@@ -82,7 +82,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/WebResponseClientError"
+                  "$ref": "#/components/schemas/WebResponseMessage"
                 }
               }
             }
@@ -129,7 +129,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/WebResponseClientError"
+                  "$ref": "#/components/schemas/WebResponseMessage"
                 }
               }
             }
@@ -139,7 +139,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/WebResponseClientError"
+                  "$ref": "#/components/schemas/WebResponseMessage"
                 }
               }
             }
@@ -193,7 +193,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/WebResponseClientError"
+                  "$ref": "#/components/schemas/WebResponseMessage"
                 }
               }
             }
@@ -203,7 +203,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/WebResponseClientError"
+                  "$ref": "#/components/schemas/WebResponseMessage"
                 }
               }
             }
@@ -238,18 +238,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "code": {
-                      "type": "number"
-                    },
-                    "status": {
-                      "type": "string"
-                    },
-                    "data": {
-                      "type": "object"
-                    }
-                  }
+                  "$ref": "#/components/schemas/WebResponseMessage"
                 }
               }
             }
@@ -259,7 +248,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/WebResponseClientError"
+                  "$ref": "#/components/schemas/WebResponseMessage"
                 }
               }
             }
@@ -269,7 +258,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/WebResponseClientError"
+                  "$ref": "#/components/schemas/WebResponseMessage"
                 }
               }
             }
@@ -296,6 +285,16 @@
           },
           "name": {
             "type": "string"
+          }
+        }
+      },
+      "CreateOrUpdateCategory": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 128
           }
         }
       },
@@ -330,7 +329,7 @@
           }
         }
       },
-      "WebResponseClientError": {
+      "WebResponseMessage": {
         "type": "object",
         "properties": {
           "code": {
@@ -339,32 +338,8 @@
           "status": {
             "type": "string"
           },
-          "data": {
+          "message": {
             "type": "string"
-          }
-        }
-      },
-      "WebResponseServerError": {
-        "type": "object",
-        "properties": {
-          "code": {
-            "type": "number"
-          },
-          "status": {
-            "type": "string"
-          },
-          "data": {
-            "type": "object"
-          }
-        }
-      },
-      "CreateOrUpdateCategory": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string",
-            "minLength": 3,
-            "maxLength": 128
           }
         }
       }

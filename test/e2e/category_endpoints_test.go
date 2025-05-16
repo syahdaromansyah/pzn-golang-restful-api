@@ -36,7 +36,7 @@ func TestUnauthorized(t *testing.T) {
 	// Arrange
 
 	// Assume it is the category FindAll request
-	testRequest := httptest.NewRequest(http.MethodGet, fmt.Sprintf("%s/api/categories", baseUrl), nil)
+	testRequest := httptest.NewRequest(http.MethodGet, fmt.Sprintf("%s/api/v2/categories", baseUrl), nil)
 
 	recorder := httptest.NewRecorder()
 
@@ -54,14 +54,14 @@ func TestUnauthorized(t *testing.T) {
 	responseBodyBytes, err := io.ReadAll(recorderResponse.Body)
 	internal_helper.LogStdPanicIfError(err)
 
-	webResponse := new(model.WebResponse[string])
+	webResponse := new(model.WebResponseMessage)
 
 	err = json.Unmarshal(responseBodyBytes, webResponse)
 	internal_helper.LogStdPanicIfError(err)
 
 	assert.Equal(t, http.StatusUnauthorized, webResponse.Code)
 	assert.Equal(t, "UNAUTHORIZED", webResponse.Status)
-	assert.Equal(t, "unauthorized", webResponse.Data)
+	assert.Equal(t, "unauthorized", webResponse.Message)
 }
 
 func TestCreateFailed(t *testing.T) {
@@ -71,7 +71,7 @@ func TestCreateFailed(t *testing.T) {
 
 		requestBody := strings.NewReader("")
 
-		testRequest := httptest.NewRequest(http.MethodPost, fmt.Sprintf("%s/api/categories", baseUrl), requestBody)
+		testRequest := httptest.NewRequest(http.MethodPost, fmt.Sprintf("%s/api/v2/categories", baseUrl), requestBody)
 
 		testRequest.Header.Set("X-API-Key", "test_key")
 
@@ -91,7 +91,7 @@ func TestCreateFailed(t *testing.T) {
 		responseBodyBytes, err := io.ReadAll(recorderResponse.Body)
 		internal_helper.LogStdPanicIfError(err)
 
-		webResponse := new(model.WebResponse[string])
+		webResponse := new(model.WebResponseMessage)
 
 		err = json.Unmarshal(responseBodyBytes, webResponse)
 		internal_helper.LogStdPanicIfError(err)
@@ -106,7 +106,7 @@ func TestCreateFailed(t *testing.T) {
 
 		requestBody := strings.NewReader(`{"name":"F"}`)
 
-		testRequest := httptest.NewRequest(http.MethodPost, fmt.Sprintf("%s/api/categories", baseUrl), requestBody)
+		testRequest := httptest.NewRequest(http.MethodPost, fmt.Sprintf("%s/api/v2/categories", baseUrl), requestBody)
 
 		testRequest.Header.Set("X-API-Key", "test_key")
 
@@ -126,7 +126,7 @@ func TestCreateFailed(t *testing.T) {
 		responseBodyBytes, err := io.ReadAll(recorderResponse.Body)
 		internal_helper.LogStdPanicIfError(err)
 
-		webResponse := new(model.WebResponse[string])
+		webResponse := new(model.WebResponseMessage)
 
 		err = json.Unmarshal(responseBodyBytes, webResponse)
 		internal_helper.LogStdPanicIfError(err)
@@ -142,7 +142,7 @@ func TestCreateSuccess(t *testing.T) {
 
 	requestBody := strings.NewReader(`{"name":"Fashions"}`)
 
-	testRequest := httptest.NewRequest(http.MethodPost, fmt.Sprintf("%s/api/categories", baseUrl), requestBody)
+	testRequest := httptest.NewRequest(http.MethodPost, fmt.Sprintf("%s/api/v2/categories", baseUrl), requestBody)
 
 	testRequest.Header.Set("X-API-Key", "test_key")
 
@@ -180,7 +180,7 @@ func TestUpdateFailed(t *testing.T) {
 
 		requestBody := strings.NewReader("")
 
-		testRequest := httptest.NewRequest(http.MethodPut, fmt.Sprintf("%s/api/categories/CAT-1", baseUrl), requestBody)
+		testRequest := httptest.NewRequest(http.MethodPut, fmt.Sprintf("%s/api/v2/categories/CAT-1", baseUrl), requestBody)
 
 		testRequest.Header.Set("X-API-Key", "test_key")
 
@@ -200,7 +200,7 @@ func TestUpdateFailed(t *testing.T) {
 		responseBodyBytes, err := io.ReadAll(recorderResponse.Body)
 		internal_helper.LogStdPanicIfError(err)
 
-		webResponse := new(model.WebResponse[string])
+		webResponse := new(model.WebResponseMessage)
 
 		err = json.Unmarshal(responseBodyBytes, webResponse)
 		internal_helper.LogStdPanicIfError(err)
@@ -215,7 +215,7 @@ func TestUpdateFailed(t *testing.T) {
 
 		requestBody := strings.NewReader(`{"name":"Electronics"}`)
 
-		testRequest := httptest.NewRequest(http.MethodPut, fmt.Sprintf("%s/api/categories/CAT-1", baseUrl), requestBody)
+		testRequest := httptest.NewRequest(http.MethodPut, fmt.Sprintf("%s/api/v2/categories/CAT-1", baseUrl), requestBody)
 
 		testRequest.Header.Set("X-API-Key", "test_key")
 
@@ -235,14 +235,14 @@ func TestUpdateFailed(t *testing.T) {
 		responseBodyBytes, err := io.ReadAll(recorderResponse.Body)
 		internal_helper.LogStdPanicIfError(err)
 
-		webResponse := new(model.WebResponse[string])
+		webResponse := new(model.WebResponseMessage)
 
 		err = json.Unmarshal(responseBodyBytes, webResponse)
 		internal_helper.LogStdPanicIfError(err)
 
 		assert.Equal(t, http.StatusNotFound, webResponse.Code)
 		assert.Equal(t, "NOT FOUND", webResponse.Status)
-		assert.Equal(t, "category is not found", webResponse.Data)
+		assert.Equal(t, "category is not found", webResponse.Message)
 	})
 
 	t.Run("400 - Field Name - Chars Min", func(t *testing.T) {
@@ -251,7 +251,7 @@ func TestUpdateFailed(t *testing.T) {
 
 		requestBody := strings.NewReader(`{"name":"E"}`)
 
-		testRequest := httptest.NewRequest(http.MethodPut, fmt.Sprintf("%s/api/categories/CAT-1", baseUrl), requestBody)
+		testRequest := httptest.NewRequest(http.MethodPut, fmt.Sprintf("%s/api/v2/categories/CAT-1", baseUrl), requestBody)
 
 		testRequest.Header.Set("X-API-Key", "test_key")
 
@@ -271,7 +271,7 @@ func TestUpdateFailed(t *testing.T) {
 		responseBodyBytes, err := io.ReadAll(recorderResponse.Body)
 		internal_helper.LogStdPanicIfError(err)
 
-		webResponse := new(model.WebResponse[string])
+		webResponse := new(model.WebResponseMessage)
 
 		err = json.Unmarshal(responseBodyBytes, webResponse)
 		internal_helper.LogStdPanicIfError(err)
@@ -294,7 +294,7 @@ func TestUpdateSuccess(t *testing.T) {
 
 	requestBody := strings.NewReader(`{"name":"Electronics"}`)
 
-	testRequest := httptest.NewRequest(http.MethodPut, fmt.Sprintf("%s/api/categories/CAT-1", baseUrl), requestBody)
+	testRequest := httptest.NewRequest(http.MethodPut, fmt.Sprintf("%s/api/v2/categories/CAT-1", baseUrl), requestBody)
 
 	testRequest.Header.Set("X-API-Key", "test_key")
 
@@ -330,7 +330,7 @@ func TestDeleteFailed(t *testing.T) {
 		// Arrange
 		defer categoriesDbTableHelper.DeleteAll()
 
-		testRequest := httptest.NewRequest(http.MethodDelete, fmt.Sprintf("%s/api/categories/CAT-1", baseUrl), nil)
+		testRequest := httptest.NewRequest(http.MethodDelete, fmt.Sprintf("%s/api/v2/categories/CAT-1", baseUrl), nil)
 
 		testRequest.Header.Set("X-API-Key", "test_key")
 
@@ -350,14 +350,14 @@ func TestDeleteFailed(t *testing.T) {
 		responseBodyBytes, err := io.ReadAll(recorderResponse.Body)
 		internal_helper.LogStdPanicIfError(err)
 
-		webResponse := new(model.WebResponse[string])
+		webResponse := new(model.WebResponseMessage)
 
 		err = json.Unmarshal(responseBodyBytes, webResponse)
 		internal_helper.LogStdPanicIfError(err)
 
 		assert.Equal(t, http.StatusNotFound, webResponse.Code)
 		assert.Equal(t, "NOT FOUND", webResponse.Status)
-		assert.Equal(t, "category is not found", webResponse.Data)
+		assert.Equal(t, "category is not found", webResponse.Message)
 	})
 }
 
@@ -372,7 +372,7 @@ func TestDeleteSuccess(t *testing.T) {
 	})
 	// ------------------------
 
-	testRequest := httptest.NewRequest(http.MethodDelete, fmt.Sprintf("%s/api/categories/CAT-1", baseUrl), nil)
+	testRequest := httptest.NewRequest(http.MethodDelete, fmt.Sprintf("%s/api/v2/categories/CAT-1", baseUrl), nil)
 
 	testRequest.Header.Set("X-API-Key", "test_key")
 
@@ -409,7 +409,7 @@ func TestFindByIdFailed(t *testing.T) {
 		// Arrange
 		defer categoriesDbTableHelper.DeleteAll()
 
-		testRequest := httptest.NewRequest(http.MethodGet, fmt.Sprintf("%s/api/categories/CAT-1", baseUrl), nil)
+		testRequest := httptest.NewRequest(http.MethodGet, fmt.Sprintf("%s/api/v2/categories/CAT-1", baseUrl), nil)
 
 		testRequest.Header.Set("X-API-Key", "test_key")
 
@@ -429,14 +429,14 @@ func TestFindByIdFailed(t *testing.T) {
 		responseBodyBytes, err := io.ReadAll(recorderResponse.Body)
 		internal_helper.LogStdPanicIfError(err)
 
-		webResponse := new(model.WebResponse[string])
+		webResponse := new(model.WebResponseMessage)
 
 		err = json.Unmarshal(responseBodyBytes, webResponse)
 		internal_helper.LogStdPanicIfError(err)
 
 		assert.Equal(t, http.StatusNotFound, webResponse.Code)
 		assert.Equal(t, "NOT FOUND", webResponse.Status)
-		assert.Equal(t, "category is not found", webResponse.Data)
+		assert.Equal(t, "category is not found", webResponse.Message)
 	})
 }
 
@@ -451,7 +451,7 @@ func TestFindByIdSuccess(t *testing.T) {
 	})
 	// ------------------------
 
-	testRequest := httptest.NewRequest(http.MethodGet, fmt.Sprintf("%s/api/categories/CAT-1", baseUrl), nil)
+	testRequest := httptest.NewRequest(http.MethodGet, fmt.Sprintf("%s/api/v2/categories/CAT-1", baseUrl), nil)
 
 	testRequest.Header.Set("X-API-Key", "test_key")
 
@@ -496,7 +496,7 @@ func TestFindAllSuccess(t *testing.T) {
 	})
 	// ------------------------
 
-	testRequest := httptest.NewRequest(http.MethodGet, fmt.Sprintf("%s/api/categories", baseUrl), nil)
+	testRequest := httptest.NewRequest(http.MethodGet, fmt.Sprintf("%s/api/v2/categories", baseUrl), nil)
 
 	testRequest.Header.Set("X-API-Key", "test_key")
 

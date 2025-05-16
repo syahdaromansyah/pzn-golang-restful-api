@@ -70,10 +70,10 @@ func (c *categoryControllerImpl) Delete(w http.ResponseWriter, r *http.Request, 
 
 	c.UseCase.Delete(r.Context(), categoryId)
 
-	webResponse := &model.WebResponse[struct{}]{
-		Code:   http.StatusOK,
-		Status: "OK",
-		Data:   struct{}{},
+	webResponse := &model.WebResponseMessage{
+		Code:    http.StatusOK,
+		Status:  "OK",
+		Message: "category is successfully deleted",
 	}
 
 	w.Header().Set("content-type", "application/json")

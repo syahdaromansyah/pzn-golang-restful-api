@@ -272,15 +272,15 @@ func TestDeleteSuccess(t *testing.T) {
 	responseBodyBytes, err := io.ReadAll(recorderResponse.Body)
 	helper.PanicIfError(err)
 
-	bodyResponse := new(model.WebResponse[struct{}])
+	bodyResponse := new(model.WebResponseMessage)
 
 	err = json.Unmarshal(responseBodyBytes, bodyResponse)
 	helper.PanicIfError(err)
 
-	assert.Equal(t, &model.WebResponse[struct{}]{
-		Code:   http.StatusOK,
-		Status: "OK",
-		Data:   struct{}{},
+	assert.Equal(t, &model.WebResponseMessage{
+		Code:    http.StatusOK,
+		Status:  "OK",
+		Message: "category is successfully deleted",
 	}, bodyResponse)
 
 	categoryUseCase.Mock.AssertExpectations(t)
