@@ -49,7 +49,7 @@ func Test400Handler(t *testing.T) {
 		requestBodyBytes, err := io.ReadAll(recorderResponse.Body)
 		helper.LogStdPanicIfError(err)
 
-		webResponse := new(model.WebResponse[string])
+		webResponse := new(model.WebResponseMessage)
 
 		err = json.Unmarshal(requestBodyBytes, webResponse)
 		helper.LogStdPanicIfError(err)
@@ -77,14 +77,14 @@ func Test400Handler(t *testing.T) {
 		requestBodyBytes, err := io.ReadAll(recorderResponse.Body)
 		helper.LogStdPanicIfError(err)
 
-		webResponse := new(model.WebResponse[string])
+		webResponse := new(model.WebResponseMessage)
 
 		err = json.Unmarshal(requestBodyBytes, webResponse)
 		helper.LogStdPanicIfError(err)
 
 		assert.Equal(t, http.StatusBadRequest, webResponse.Code)
 		assert.Equal(t, "BAD REQUEST", webResponse.Status)
-		assert.Equal(t, "other 400 error request", webResponse.Data)
+		assert.Equal(t, "other 400 error request", webResponse.Message)
 	})
 }
 
@@ -107,14 +107,14 @@ func Test401Handler(t *testing.T) {
 	requestBodyBytes, err := io.ReadAll(recorderResponse.Body)
 	helper.LogStdPanicIfError(err)
 
-	webResponse := new(model.WebResponse[string])
+	webResponse := new(model.WebResponseMessage)
 
 	err = json.Unmarshal(requestBodyBytes, webResponse)
 	helper.LogStdPanicIfError(err)
 
 	assert.Equal(t, http.StatusUnauthorized, webResponse.Code)
 	assert.Equal(t, "UNAUTHORIZED", webResponse.Status)
-	assert.Equal(t, "401 error request", webResponse.Data)
+	assert.Equal(t, "401 error request", webResponse.Message)
 }
 
 func Test404Handler(t *testing.T) {
@@ -136,18 +136,18 @@ func Test404Handler(t *testing.T) {
 	requestBodyBytes, err := io.ReadAll(recorderResponse.Body)
 	helper.LogStdPanicIfError(err)
 
-	webResponse := new(model.WebResponse[string])
+	webResponse := new(model.WebResponseMessage)
 
 	err = json.Unmarshal(requestBodyBytes, webResponse)
 	helper.LogStdPanicIfError(err)
 
 	assert.Equal(t, http.StatusNotFound, webResponse.Code)
 	assert.Equal(t, "NOT FOUND", webResponse.Status)
-	assert.Equal(t, "404 error request", webResponse.Data)
+	assert.Equal(t, "404 error request", webResponse.Message)
 }
 
 func Test500Handler(t *testing.T) {
-	error500 := exception.NewErrorInternalServer(errors.New("internal server error"), "internal server error")
+	error500 := exception.NewErrorInternalServer(errors.New("internal server error"), "something went wrong")
 
 	recorder := httptest.NewRecorder()
 
@@ -165,12 +165,12 @@ func Test500Handler(t *testing.T) {
 	requestBodyBytes, err := io.ReadAll(recorderResponse.Body)
 	helper.LogStdPanicIfError(err)
 
-	webResponse := new(model.WebResponse[struct{}])
+	webResponse := new(model.WebResponseMessage)
 
 	err = json.Unmarshal(requestBodyBytes, webResponse)
 	helper.LogStdPanicIfError(err)
 
 	assert.Equal(t, http.StatusInternalServerError, webResponse.Code)
 	assert.Equal(t, "INTERNAL SERVER ERROR", webResponse.Status)
-	assert.Equal(t, struct{}{}, webResponse.Data)
+	assert.Equal(t, "something went wrong", webResponse.Message)
 }

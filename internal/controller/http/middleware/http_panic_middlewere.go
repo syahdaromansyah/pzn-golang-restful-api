@@ -46,10 +46,10 @@ func (m *httpPanicMiddleware) clientError(w http.ResponseWriter, _ *http.Request
 		if exception.StatusCode == http.StatusBadRequest {
 			w.WriteHeader(http.StatusBadRequest)
 
-			webResponse := &model.WebResponse[string]{
-				Code:   http.StatusBadRequest,
-				Status: "BAD REQUEST",
-				Data:   exception.GetDetailError(),
+			webResponse := &model.WebResponseMessage{
+				Code:    http.StatusBadRequest,
+				Status:  "BAD REQUEST",
+				Message: exception.GetDetailError(),
 			}
 
 			helper.WriteToResponseBody(w, webResponse)
@@ -58,10 +58,10 @@ func (m *httpPanicMiddleware) clientError(w http.ResponseWriter, _ *http.Request
 		if exception.StatusCode == http.StatusUnauthorized {
 			w.WriteHeader(http.StatusUnauthorized)
 
-			webResponse := &model.WebResponse[string]{
-				Code:   http.StatusUnauthorized,
-				Status: "UNAUTHORIZED",
-				Data:   exception.GetDetailError(),
+			webResponse := &model.WebResponseMessage{
+				Code:    http.StatusUnauthorized,
+				Status:  "UNAUTHORIZED",
+				Message: exception.GetDetailError(),
 			}
 
 			helper.WriteToResponseBody(w, webResponse)
@@ -70,10 +70,10 @@ func (m *httpPanicMiddleware) clientError(w http.ResponseWriter, _ *http.Request
 		if exception.StatusCode == http.StatusNotFound {
 			w.WriteHeader(http.StatusNotFound)
 
-			webResponse := &model.WebResponse[string]{
-				Code:   http.StatusNotFound,
-				Status: "NOT FOUND",
-				Data:   exception.GetDetailError(),
+			webResponse := &model.WebResponseMessage{
+				Code:    http.StatusNotFound,
+				Status:  "NOT FOUND",
+				Message: exception.GetDetailError(),
 			}
 
 			helper.WriteToResponseBody(w, webResponse)
@@ -85,10 +85,10 @@ func (m *httpPanicMiddleware) clientError(w http.ResponseWriter, _ *http.Request
 	if exception, ok := err.(validator.ValidationErrors); ok {
 		w.WriteHeader(http.StatusBadRequest)
 
-		webResponse := &model.WebResponse[string]{
-			Code:   http.StatusBadRequest,
-			Status: "BAD REQUEST",
-			Data:   exception.Error(),
+		webResponse := &model.WebResponseMessage{
+			Code:    http.StatusBadRequest,
+			Status:  "BAD REQUEST",
+			Message: exception.Error(),
 		}
 
 		helper.WriteToResponseBody(w, webResponse)
@@ -102,10 +102,10 @@ func (m *httpPanicMiddleware) clientError(w http.ResponseWriter, _ *http.Request
 func (m *httpPanicMiddleware) internalServerError(w http.ResponseWriter, _ *http.Request, err any) {
 	w.WriteHeader(http.StatusInternalServerError)
 
-	webResponse := &model.WebResponse[struct{}]{
-		Code:   http.StatusInternalServerError,
-		Status: "INTERNAL SERVER ERROR",
-		Data:   struct{}{},
+	webResponse := &model.WebResponseMessage{
+		Code:    http.StatusInternalServerError,
+		Status:  "INTERNAL SERVER ERROR",
+		Message: "something went wrong",
 	}
 
 	helper.WriteToResponseBody(w, webResponse)
